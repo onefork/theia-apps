@@ -61,6 +61,7 @@
     "theiaPluginsDir": "plugins",
     "theiaPlugins": {
         "vscode-gitlens": "https://open-vsx.org/api/eamodio/gitlens/10.2.1/file/eamodio.gitlens-10.2.1.vsix",
+        "vscode-git-graph": "https://onefork.github.io/vscode-git-graph/mhutchie.git-graph-1.22.0.vsix",
         "vscode-live-server": "https://open-vsx.org/api/ritwickdey/LiveServer/5.6.1/file/ritwickdey.LiveServer-5.6.1.vsix",
         "vscode-anaconda-extension-pack": "https://open-vsx.org/api/ms-python/anaconda-extension-pack/1.0.1/file/ms-python.anaconda-extension-pack-1.0.1.vsix",
         "vscode-browser-preview": "https://onefork.github.io/vscode-browser-preview/auchenberg.vscode-browser-preview-0.6.6.vsix",

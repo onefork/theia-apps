@@ -22,6 +22,37 @@ This repository contains example Theia applications based on published Theia ext
 
 `theiaide/theia` image contains an example of Theia based IDE for Web Developers.
 
+### Cheat Sheet
+
+```bash
+sudo docker build . \
+  --build-arg UID=$(id -u) \
+  --build-arg GID=$(id -g) \
+  --build-arg version=next \
+  -t theia:next
+```
+
+```bash
+sudo docker run -it --init -p 3000:3000 -v "$(pwd):/home/project:cached" theia:next
+```
+
+```bash
+sudo docker build . \
+  -t test
+
+sudo docker run -it --init test
+```
+
+HTTPS
+Not working...
+
+```bash
+sudo docker build ./theia-https-docker \
+  --build-arg app=theia-python \
+  --build-arg version=next \
+  -t theiaide/theia-python-sec:next
+```
+
 ### How to use `theiaide/theia` image?
 
 At the moment Theia is still in [active development](https://github.com/theia-ide/theia#roadmap). It is recommended to use [`theiaide/theia:next`](#typefoxtheianext) image to have a look at the current state.

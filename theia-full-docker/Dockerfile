@@ -165,9 +165,45 @@ RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y \
     && rustup update \
     && rustup component add rls rust-src rust-analysis
 
+# Fish
+RUN apt-get update && apt-get install -y fish
+
+# Miniconda3 (requirements)
+RUN apt-get update --fix-missing && \
+    apt-get install -y wget bzip2 ca-certificates libglib2.0-0 libxext6 libsm6 libxrender1 git mercurial subversion && \
+    apt-get clean
+
+# Miniconda3 (multiuser install)
+# https://github.com/ContinuumIO/docker-images/blob/master/miniconda3/debian/Dockerfile
+# https://docs.conda.io/projects/conda/en/latest/user-guide/install/macos.html#install-macos-silent
+# https://medium.com/@pjptech/installing-anaconda-for-multiple-users-650b2a6666c6
+
+ARG conda_prefix=/opt/conda
+# ARG conda_prefix=~/miniconda3
+
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+ENV PATH $conda_prefix/bin:$PATH
+
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p $conda_prefix && \
+    rm ~/miniconda.sh && \
+    $conda_prefix/bin/conda clean -tipsy && \
+    ln -s $conda_prefix/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". $conda_prefix/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    # echo "conda activate base" >> ~/.bashrc && \
+    find $conda_prefix/ -follow -type f -name '*.a' -delete && \
+    find $conda_prefix/ -follow -type f -name '*.js.map' -delete && \
+    $conda_prefix/bin/conda clean -afy && \
+    # init for fish (root user)
+    $conda_prefix/bin/conda init fish
 
 ## User account
-RUN adduser --disabled-password --gecos '' theia && \
+## uid/gid fix https://vsupalov.com/docker-shared-permissions/
+ARG UID
+ARG GID
+
+RUN addgroup --gid $GID theia && \
+    adduser --disabled-password --gecos '' --uid $UID --gid $GID theia && \
     adduser theia sudo && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers;
 
@@ -203,5 +239,20 @@ ENV GOPATH=/home/project
 ENV PATH=$PATH:$GOPATH/bin
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
+
+# Miniconda3 (per-user setup)
+ARG conda_multi=share
+WORKDIR /home/theia
+COPY $conda_multi.condarc ./.condarc
+RUN echo ". $conda_prefix/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    # echo "conda activate base" >> ~/.bashrc && \
+    # init for fish
+    $conda_prefix/bin/conda init fish
+    # add env "dev"
+    # $conda_prefix/bin/conda create -y -n dev && \
+    # $conda_prefix/bin/conda activate dev && \
+    # $conda_prefix/bin/conda install -y pip && \
+    # $conda_prefix/bin/conda install -y -c conda-forge jupyterlab && \
+    # $conda_prefix/bin/conda install pytorch torchvision cpuonly -c pytorch
 
 ENTRYPOINT [ "yarn", "theia", "start", "/home/project", "--hostname=0.0.0.0" ]

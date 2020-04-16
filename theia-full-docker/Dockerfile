@@ -257,4 +257,10 @@ RUN echo ". $conda_prefix/etc/profile.d/conda.sh" >> ~/.bashrc && \
     # $conda_prefix/bin/conda install -y -c conda-forge jupyterlab && \
     # $conda_prefix/bin/conda install pytorch torchvision cpuonly -c pytorch
 
+# Fish (sets $USER fix)
+# `whoami` or `ud -un`
+# https://stackoverflow.com/questions/54411218/docker-why-isnt-user-environment-variable-set
+# https://unix.stackexchange.com/questions/76354/who-sets-user-and-username-environment-variables
+ENV USER=theia
+
 ENTRYPOINT [ "yarn", "theia", "start", "/home/project", "--hostname=0.0.0.0" ]

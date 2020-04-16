@@ -22,7 +22,25 @@ This repository contains example Theia applications based on published Theia ext
 
 `theiaide/theia` image contains an example of Theia based IDE for Web Developers.
 
+### TODOs
+
+Port forwarding
+https://github.com/eclipse-theia/theia/issues/4727
+
+HTTPS not working see below
+
+Browser preview
+https://github.com/auchenberg/vscode-browser-preview
+https://github.com/FabianLauer/chrome-vs-code
+
+Browser preview needs HTTPS
+https://github.com/eclipse-theia/theia/issues/4961
+
 ### Cheat Sheet
+
+https://docs.docker.com/engine/reference/builder/
+https://docs.docker.com/engine/reference/commandline/run/
+https://docs.docker.com/engine/reference/commandline/build/
 
 ```bash
 sudo docker build . \
@@ -36,15 +54,7 @@ sudo docker build . \
 sudo docker run -it --init -p 3000:3000 -v "$(pwd):/home/project:cached" theia:next
 ```
 
-```bash
-sudo docker build . \
-  -t test
-
-sudo docker run -it --init test
-```
-
-HTTPS
-Not working...
+HTTPS (not working)
 
 ```bash
 sudo docker build ./theia-https-docker \

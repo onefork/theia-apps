@@ -26,8 +26,8 @@ This repository contains example Theia applications based on published Theia ext
 
 ```bash
 sudo docker build . \
-  --build-arg UID=$(id -u) \
-  --build-arg GID=$(id -g) \
+  --build-arg uid=$(id -u) \
+  --build-arg gid=$(id -g) \
   --build-arg version=next \
   -t theia:next
 ```

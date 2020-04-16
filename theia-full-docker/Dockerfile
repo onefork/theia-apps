@@ -198,12 +198,14 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86
     $conda_prefix/bin/conda init fish
 
 ## User account
-## uid/gid fix https://vsupalov.com/docker-shared-permissions/
-ARG UID
-ARG GID
+# uid/gid fix https://vsupalov.com/docker-shared-permissions/
+# https://github.com/theia-ide/theia-apps/issues/278
+# https://gist.github.com/heyfluke/b8372df866ec2584f9a51ca7d7fe9ebb 
+ARG uid
+ARG gid
 
-RUN addgroup --gid $GID theia && \
-    adduser --disabled-password --gecos '' --uid $UID --gid $GID theia && \
+RUN addgroup --gid $gid theia && \
+    adduser --disabled-password --gecos '' --uid $uid --gid $gid theia && \
     adduser theia sudo && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers;
 
